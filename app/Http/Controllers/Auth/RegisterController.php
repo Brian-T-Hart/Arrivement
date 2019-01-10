@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Seller;
+use App\Buyer;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -64,11 +66,25 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
+        $user = User::create([
             'name' => $data['name'],
             'type' => $data['type'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+
+        $userType = $user->type;
+        $userId = $user->id;
+
+        if ($userType == 'Seller') {
+            Seller::create(['user_id' => $userId]);
+        }
+
+        if ($userType == 'Buyer') {
+            Buyer::create(['user_id' => $userId]);
+        }
+
+        return $user;
+        
     }
 }
