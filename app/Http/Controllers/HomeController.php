@@ -23,6 +23,16 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        if (auth()->user()->type == 'Seller') {
+            return view('sellerProfile');
+        }
+
+        elseif (auth()->user()->type == 'Buyer') {
+            return view('buyerProfile');
+        }
+
+        else {
+            return view('home');
+        }
     }
 }
